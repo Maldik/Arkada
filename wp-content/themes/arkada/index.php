@@ -301,13 +301,10 @@
         ?>
           <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="shop-card">
-              <?php 
-              if (has_post_thumbnail( )){
-              the_post_thumbnail(); 
-            } else {
-              echo "<img src='" . get_template_directory_uri() ."/assets/img/not-image.png' alt=''>";
-            }
-              ?>
+              <?php if ( has_post_thumbnail() ) : the_post_thumbnail(); ?>
+              <?php else : ?>
+                <img src='" . get_template_directory_uri() ."/assets/img/not-image.png' alt=''>
+              <?php endif; ?>
               <h3><?php the_title(); ?></h3>
               <p>Площадь <?php the_field('area'); ?> м<sup>2</sup></p>
               <span><?php the_field('old_price'); ?></span>
@@ -490,87 +487,32 @@
         </div>
       </div>
     </section>
-
+<?php if( $testimonials = get_field( 'testimonials', get_the_ID() ) ) : ?>
     <section class="review" id="review">
       <div class="container">
         <h2>Клиенты о нас</h2>
         <div class="row">
           <div class="slider_ex">
-            <div class="review-block">
+            <?php foreach ( $testimonials as $value ) : ?>
+              <div class="review-block">
               <div class="media review-avatar">
                 <div class="media-left">
-                  <img class="media-object" src="<?php echo bloginfo('template_url')?>/assets/img/review/ava.png" alt="Анна Маслова">
+                  <img class="media-object" src="<?php echo wp_get_attachment_image_url( $value['avatar_img'], 'full' ); ?>" alt="Анна Маслова">
                 </div>
                 <div class="media-body">
-                  <p class="review-avatar-name">Анна Маслова, Москва</p>
+                  <p class="review-avatar-name"><?php echo $value['avatar_name']; ?></p>
                 </div>
               </div>
               <div class="review-block-text">
-                <h3>Вопрос по недвижимости</h3>
-                <p>Если бы не компания «Найдем Адвоката», то моя семья могла бы совершить роковую ошибку и попасть в лапы к аферистам. Юрист за 2 дня смог досудебно полностью урегулировать конфликт. Спасибо Вам</p>
+                <?php echo $value['text']; ?>
               </div>
             </div>
-            <div class="review-block">
-              <div class="media review-avatar">
-                <div class="media-left">
-                  <img class="media-object" src="<?php echo bloginfo('template_url')?>/assets/img/review/ava.png" alt="Анна Маслова">
-                </div>
-                <div class="media-body">
-                  <p class="review-avatar-name">Анна Маслова, Москва</p>
-                </div>
-              </div>
-              <div class="review-block-text">
-                <h3>Вопрос по недвижимости</h3>
-                <p>Если бы не компания «Найдем Адвоката», то моя семья могла бы совершить роковую ошибку и попасть в лапы к аферистам. Юрист за 2 дня смог досудебно полностью урегулировать конфликт. Спасибо Вам</p>
-              </div>
-            </div>
-            <div class="review-block">
-              <div class="media review-avatar">
-                <div class="media-left">
-                  <img class="media-object" src="<?php echo bloginfo('template_url')?>/assets/img/review/ava.png" alt="Анна Маслова">
-                </div>
-                <div class="media-body">
-                  <p class="review-avatar-name">Анна Маслова, Москва</p>
-                </div>
-              </div>
-              <div class="review-block-text">
-                <h3>Вопрос по недвижимости</h3>
-                <p>Если бы не компания «Найдем Адвоката», то моя семья могла бы совершить роковую ошибку и попасть в лапы к аферистам. Юрист за 2 дня смог досудебно полностью урегулировать конфликт. Спасибо Вам</p>
-              </div>
-            </div>
-            <div class="review-block">
-              <div class="media review-avatar">
-                <div class="media-left">
-                  <img class="media-object" src="<?php echo bloginfo('template_url')?>/assets/img/review/ava.png" alt="Анна Маслова">
-                </div>
-                <div class="media-body">
-                  <p class="review-avatar-name">Анна Маслова, Москва</p>
-                </div>
-              </div>
-              <div class="review-block-text">
-                <h3>Вопрос по недвижимости</h3>
-                <p>Если бы не компания «Найдем Адвоката», то моя семья могла бы совершить роковую ошибку и попасть в лапы к аферистам. Юрист за 2 дня смог досудебно полностью урегулировать конфликт. Спасибо Вам</p>
-              </div>
-            </div>
-            <div class="review-block">
-              <div class="media review-avatar">
-                <div class="media-left">
-                  <img class="media-object" src="<?php echo bloginfo('template_url')?>/assets/img/review/ava.png" alt="Анна Маслова">
-                </div>
-                <div class="media-body">
-                  <p class="review-avatar-name">Анна Маслова, Москва</p>
-                </div>
-              </div>
-              <div class="review-block-text">
-                <h3>Вопрос по недвижимости</h3>
-                <p>Если бы не компания «Найдем Адвоката», то моя семья могла бы совершить роковую ошибку и попасть в лапы к аферистам. Юрист за 2 дня смог досудебно полностью урегулировать конфликт. Спасибо Вам</p>
-              </div>
-            </div>
+            <?php endforeach; ?>
           </div>
         </div>
       </div>
     </section>
-
+<?php endif; ?>
     <div class="contacts" id="contacts">
       <div class="container">
         <div class="row">
@@ -625,21 +567,7 @@
       </div>
     </div>
 
-    <!-- Popup -->
-    <div class="popup popup-thanks">
-      <!-- Само (белое) модальное окно -->
-      <div class="popup-dialog">
-        <!-- Содежримое -->
-        <div class="popup-content">
-          <button type="submit" class="popup-close">&times;</button>
-          <h2 class="popup-header">
-            Спасибо за заявку
-          </h4>
-          <p>В течение 5 минут мы Вам перезвоним</p>
-          <button class="thanks-btn button-small">Вернуться на сайт</button>
-        </div>
-      </div>
-    </div>
+<?php load_template( dirname( __FILE__ ) . '/partials/popup.php', true ); ?>
 
     <?php wp_footer();?>
 
